@@ -49,6 +49,36 @@ jobs:
           touch src/ctf-reader-scala.pdf
           touch src/ctf-print-ocaml.pdf
           touch src/ctf-reader-ocaml.pdf
+      - name: Upload build assets
+        uses: actions/upload-artifact@master
+        with:
+          name: src/ctf-print.pdf
+          path: src/ctf-print.pdf
+      - name: Upload build assets
+        uses: actions/upload-artifact@master
+        with:
+          name: src/ctf-reader.pdf
+          path: src/ctf-reader.pdf
+      - name: Upload build assets
+        uses: actions/upload-artifact@master
+        with:
+          name: src/ctf-print-scala.pdf
+          path: src/ctf-print-scala.pdf
+      - name: Upload build assets
+        uses: actions/upload-artifact@master
+        with:
+          name: src/ctf-reader-scala.pdf
+          path: src/ctf-reader-scala.pdf
+      - name: Upload build assets
+        uses: actions/upload-artifact@master
+        with:
+          name: src/ctf-print-ocaml.pdf
+          path: src/ctf-print-ocaml.pdf
+      - name: Upload build assets
+        uses: actions/upload-artifact@master
+        with:
+          name: src/ctf-reader-ocaml.pdf
+          path: src/ctf-reader-ocaml.pdf
 
   release:
     name: "Create Github tag/pre-release"
@@ -88,6 +118,11 @@ jobs:
           - source: src/ctfp-reader-ocaml.pdf
             destination: category-theory-for-programmers--reader--ocaml--
     steps:
+      - name: Download build assets
+        uses: actions/download-artifact@master
+        with:
+          name: src/ctf-print.pdf
+          path: src/ctf-print.pdf
       - name: Upload release assets
         uses: actions/upload-release-asset@v1
         env:
