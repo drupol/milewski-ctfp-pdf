@@ -18,6 +18,11 @@ jobs:
           - ctfp-reader-ocaml.tex
 
     steps:
+      - name: Create variables and necessary build files
+        run: |
+          echo "::set-env name=VERSION::$(git rev-parse --short HEAD)"
+          echo -n -e "\\\newcommand{\OPTversion}{$(git rev-parse --short HEAD)}" > src/version.tex
+
       - name: Build documents using LaTeX (default)
         uses: xu-cheng/latex-action@v2
         with:
@@ -33,6 +38,11 @@ jobs:
     needs: build
 
     steps:
+      - name: Create variables and necessary build files
+        run: |
+          echo "::set-env name=VERSION::$(git rev-parse --short HEAD)"
+          echo -n -e "\\\newcommand{\OPTversion}{$(git rev-parse --short HEAD)}" > src/version.tex
+
       - name: Create Github pre-release
         id: create_release
         uses: actions/create-release@v1
@@ -64,6 +74,11 @@ jobs:
           - source: src/ctfp-reader-ocaml.pdf
             destination: category-theory-for-programmers--reader--ocaml--${{ env.VERSION }}
     steps:
+      - name: Create variables and necessary build files
+        run: |
+          echo "::set-env name=VERSION::$(git rev-parse --short HEAD)"
+          echo -n -e "\\\newcommand{\OPTversion}{$(git rev-parse --short HEAD)}" > src/version.tex
+
       - name: Upload release assets
         uses: actions/upload-release-asset@v1
         env:
