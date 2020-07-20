@@ -52,32 +52,32 @@ jobs:
       - name: Upload build assets
         uses: actions/upload-artifact@master
         with:
-          name: src/ctf-print.pdf
+          name: ctf-print.pdf
           path: src/ctf-print.pdf
       - name: Upload build assets
         uses: actions/upload-artifact@master
         with:
-          name: src/ctf-reader.pdf
+          name: ctf-reader.pdf
           path: src/ctf-reader.pdf
       - name: Upload build assets
         uses: actions/upload-artifact@master
         with:
-          name: src/ctf-print-scala.pdf
+          name: ctf-print-scala.pdf
           path: src/ctf-print-scala.pdf
       - name: Upload build assets
         uses: actions/upload-artifact@master
         with:
-          name: src/ctf-reader-scala.pdf
+          name: ctf-reader-scala.pdf
           path: src/ctf-reader-scala.pdf
       - name: Upload build assets
         uses: actions/upload-artifact@master
         with:
-          name: src/ctf-print-ocaml.pdf
+          name: ctf-print-ocaml.pdf
           path: src/ctf-print-ocaml.pdf
       - name: Upload build assets
         uses: actions/upload-artifact@master
         with:
-          name: src/ctf-reader-ocaml.pdf
+          name: ctf-reader-ocaml.pdf
           path: src/ctf-reader-ocaml.pdf
 
   release:
@@ -121,7 +121,7 @@ jobs:
       - name: Download build assets
         uses: actions/download-artifact@master
         with:
-          name: src/ctf-print.pdf
+          name: ctf-print.pdf
           path: src/ctf-print.pdf
       - name: Upload release assets
         uses: actions/upload-release-asset@v1
