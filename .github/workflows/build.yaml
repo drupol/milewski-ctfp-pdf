@@ -55,7 +55,7 @@ jobs:
           latexmk_shell_escape: true
 
       - name: Upload build assets (${{ matrix.sources.output }})
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v2
         with:
           name: ${{ matrix.sources.output }}
           path: src/${{ matrix.sources.output }}
