@@ -105,17 +105,17 @@ jobs:
     strategy:
       matrix:
         assets:
-          - source: src/ctfp-print.pdf
+          - source: ctfp-print.pdf
             destination: category-theory-for-programmers--print--
-          - source: src/ctfp-reader.pdf
+          - source: ctfp-reader.pdf
             destination: category-theory-for-programmers--
-          - source: src/ctfp-print-scala.pdf
+          - source: ctfp-print-scala.pdf
             destination: category-theory-for-programmers--print--scala--
-          - source: src/ctfp-reader-scala.pdf
+          - source: ctfp-reader-scala.pdf
             destination: category-theory-for-programmers--reader--scala--
-          - source: src/ctfp-print-ocaml.pdf
+          - source: ctfp-print-ocaml.pdf
             destination: category-theory-for-programmers--print--ocaml--
-          - source: src/ctfp-reader-ocaml.pdf
+          - source: ctfp-reader-ocaml.pdf
             destination: category-theory-for-programmers--reader--ocaml--
     steps:
       - name: Download build assets
