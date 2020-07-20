@@ -104,7 +104,7 @@ jobs:
     needs: [dependencies,release]
     strategy:
       matrix:
-        destination:
+        assets:
           - source: src/ctfp-print.pdf
             destination: category-theory-for-programmers--print--
           - source: src/ctfp-reader.pdf
@@ -129,6 +129,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.release.outputs.upload_url }}
-          asset_path: ${{ matrix.source }}
-          asset_name: ${{ matrix.destination }}${{ needs.dependencies.outputs.version }}.pdf
+          asset_path: ${{ matrix.assets.source }}
+          asset_name: ${{ matrix.assets.destination }}${{ needs.dependencies.outputs.version }}.pdf
           asset_content_type: application/pdf
