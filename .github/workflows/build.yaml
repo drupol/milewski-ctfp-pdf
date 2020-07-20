@@ -60,12 +60,13 @@ jobs:
             destination: category-theory-for-programmers--print--ocaml--${{ env.VERSION }}
           - source: src/ctfp-reader-ocaml.pdf
             destination: category-theory-for-programmers--reader--ocaml--${{ env.VERSION }}
-
-    uses: actions/upload-release-asset@v1
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    with:
-      upload_url: ${{ jobs.release.steps.create_release.outputs.upload_url }}
-      asset_path: ${{ matrix.source }}
-      asset_name: ${{ matrix.destination }}
-      asset_content_type: application/pdf
+    steps:
+      - name: Upload release assets
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ jobs.release.steps.create_release.outputs.upload_url }}
+          asset_path: ${{ matrix.source }}
+          asset_name: ${{ matrix.destination }}
+          asset_content_type: application/pdf
