@@ -7,6 +7,8 @@ jobs:
   dependencies:
     name: Build dependencies
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
 
     steps:
       - name: Set up Git repository
@@ -14,12 +16,7 @@ jobs:
 
       - name: Create global variables
         id: version
-        run: |
-          echo "::set-output name=version::$(git rev-parse --short HEAD)"
-
-      - name: Create necessary build file
-        run: |
-          echo -n -e "\\\newcommand{\OPTversion}{$(git rev-parse --short HEAD)}" > src/version.tex
+        run: echo "::set-output name=version::$(git rev-parse --short HEAD)"
 
   build:
     name: Build documents
@@ -38,6 +35,10 @@ jobs:
     steps:
       - name: Set up Git repository
         uses: actions/checkout@v1
+
+      - name: Create necessary build file
+        run: |
+          echo -n -e "\\\newcommand{\OPTversion}{$(git rev-parse --short HEAD)}" > src/version.tex
 
       - name: Build documents using LaTeX (default)
         run: |
