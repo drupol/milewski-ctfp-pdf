@@ -36,7 +36,9 @@ jobs:
     name: "Create Github tag/pre-release"
     runs-on: ubuntu-latest
     needs: build
-
+    # Map a step output to a job output
+    outputs:
+      upload_url: ${{ steps.create_release.upload_url }}
     steps:
       - name: Create variables and necessary build files
         run: |
@@ -84,7 +86,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ jobs.release.steps.create_release.outputs.upload_url }}
+          upload_url: ${{ needs.release.outputs.upload_url }}
           asset_path: ${{ matrix.source }}
           asset_name: ${{ matrix.destination }}${{ env.VERSION }}.pdf
           asset_content_type: application/pdf
