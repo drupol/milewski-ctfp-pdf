@@ -62,17 +62,17 @@ jobs:
       matrix:
         destination:
           - source: src/ctfp-print.pdf
-            destination: category-theory-for-programmers--print--${{ env.VERSION }}
+            destination: category-theory-for-programmers--print--
           - source: src/ctfp-reader.pdf
-            destination: category-theory-for-programmers--${{ env.VERSION }}
+            destination: category-theory-for-programmers--
           - source: src/ctfp-print-scala.pdf
-            destination: category-theory-for-programmers--print--scala--${{ env.VERSION }}
+            destination: category-theory-for-programmers--print--scala--
           - source: src/ctfp-reader-scala.pdf
-            destination: category-theory-for-programmers--reader--scala--${{ env.VERSION }}
+            destination: category-theory-for-programmers--reader--scala--
           - source: src/ctfp-print-ocaml.pdf
-            destination: category-theory-for-programmers--print--ocaml--${{ env.VERSION }}
+            destination: category-theory-for-programmers--print--ocaml--
           - source: src/ctfp-reader-ocaml.pdf
-            destination: category-theory-for-programmers--reader--ocaml--${{ env.VERSION }}
+            destination: category-theory-for-programmers--reader--ocaml--
     steps:
       - name: Create variables and necessary build files
         run: |
@@ -86,5 +86,5 @@ jobs:
         with:
           upload_url: ${{ jobs.release.steps.create_release.outputs.upload_url }}
           asset_path: ${{ matrix.source }}
-          asset_name: ${{ matrix.destination }}
+          asset_name: ${{ matrix.destination }}${{ env.VERSION }}.pdf
           asset_content_type: application/pdf
