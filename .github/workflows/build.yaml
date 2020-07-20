@@ -42,7 +42,7 @@ jobs:
       - name: Set up Git repository
         uses: actions/checkout@v1
 
-      - name: Create necessary build file
+      - name: Create necessary build file (version.tex)
         run: |
           echo -n -e "\\\newcommand{\OPTversion}{$(git rev-parse --short HEAD)}" > src/version.tex
 
@@ -53,6 +53,7 @@ jobs:
           latexmk_use_xelatex: true
           root_file: ${{ matrix.sources.input }}
           latexmk_shell_escape: true
+
       - name: Upload build assets (${{ matrix.sources.output }})
         uses: actions/upload-artifact@master
         with:
@@ -66,7 +67,7 @@ jobs:
     outputs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
     steps:
-      - name: Create Github pre-release
+      - name: Create Github pre-release (${{ needs.dependencies.outputs.version }})
         id: create_release
         uses: actions/create-release@v1
         env:
@@ -97,11 +98,18 @@ jobs:
           - source: ctfp-reader-ocaml.pdf
             destination: category-theory-for-programmers--reader--ocaml--
     steps:
+      - name: Set up Git repository
+        uses: actions/checkout@v1
+
       - name: Download build assets (${{ matrix.assets.source }})
-        uses: actions/download-artifact@master
+        uses: actions/download-artifact@v2
         with:
           name: ${{ matrix.assets.source }}
           path: ${{ matrix.assets.source }}
+
+      - name: ls
+        run: ls -la
+
       - name: Upload release assets
         uses: actions/upload-release-asset@v1
         env:
