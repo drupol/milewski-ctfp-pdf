@@ -98,17 +98,14 @@ jobs:
           - source: ctfp-reader-ocaml.pdf
             destination: category-theory-for-programmers--reader--ocaml--
     steps:
-      - name: Set up Git repository
-        uses: actions/checkout@v1
-
       - name: Download build assets (${{ matrix.assets.source }})
         uses: actions/download-artifact@v2
         with:
           name: ${{ matrix.assets.source }}
           path: ${{ matrix.assets.source }}
 
-      - name: ls
-        run: ls -la
+      - name: tree
+        run: tree .
 
       - name: Upload release assets
         uses: actions/upload-release-asset@v1
@@ -116,6 +113,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.release.outputs.upload_url }}
-          asset_path: ${{ matrix.assets.source }}
+          asset_path: ${{ matrix.assets.source }}/${{ matrix.assets.source }}
           asset_name: ${{ matrix.assets.destination }}${{ needs.dependencies.outputs.version }}.pdf
           asset_content_type: application/pdf
