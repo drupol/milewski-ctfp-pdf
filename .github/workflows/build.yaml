@@ -40,45 +40,18 @@ jobs:
         run: |
           echo -n -e "\\\newcommand{\OPTversion}{$(git rev-parse --short HEAD)}" > src/version.tex
 
-      - name: Build documents using LaTeX (default)
-        run: |
-          echo "Compiling ${{ matrix.sources }}..."
-          touch src/ctfp-print.pdf
-          touch src/ctfp-reader.pdf
-          touch src/ctfp-print-scala.pdf
-          touch src/ctfp-reader-scala.pdf
-          touch src/ctfp-print-ocaml.pdf
-          touch src/ctfp-reader-ocaml.pdf
-      - name: Upload build assets
+      - name: Build documents using LaTeX (${{ matrix.sources }})
+        uses: xu-cheng/latex-action@v2
+        with:
+          working_directory: src
+          latexmk_use_xelatex: true
+          root_file: ${{ matrix.sources }}
+          latexmk_shell_escape: true
+      - name: Upload build assets (${{ matrix.sources }})
         uses: actions/upload-artifact@master
         with:
-          name: ctfp-print.pdf
-          path: src/ctfp-print.pdf
-      - name: Upload build assets
-        uses: actions/upload-artifact@master
-        with:
-          name: ctfp-reader.pdf
-          path: src/ctfp-reader.pdf
-      - name: Upload build assets
-        uses: actions/upload-artifact@master
-        with:
-          name: ctfp-print-scala.pdf
-          path: src/ctfp-print-scala.pdf
-      - name: Upload build assets
-        uses: actions/upload-artifact@master
-        with:
-          name: ctfp-reader-scala.pdf
-          path: src/ctfp-reader-scala.pdf
-      - name: Upload build assets
-        uses: actions/upload-artifact@master
-        with:
-          name: ctfp-print-ocaml.pdf
-          path: src/ctfp-print-ocaml.pdf
-      - name: Upload build assets
-        uses: actions/upload-artifact@master
-        with:
-          name: ctfp-reader-ocaml.pdf
-          path: src/ctfp-reader-ocaml.pdf
+          name: ${{ matrix.sources }}
+          path: src/${{ matrix.sources }}
 
   release:
     name: "Create Github tag/pre-release"
@@ -118,36 +91,11 @@ jobs:
           - source: ctfp-reader-ocaml.pdf
             destination: category-theory-for-programmers--reader--ocaml--
     steps:
-      - name: Download build assets
+      - name: Download build assets (${{ matrix.assets.source }})
         uses: actions/download-artifact@master
         with:
-          name: ctfp-print.pdf
-          path: ctfp-print.pdf
-      - name: Download build assets
-        uses: actions/download-artifact@master
-        with:
-          name: ctfp-reader.pdf
-          path: ctfp-reader.pdf
-      - name: Download build assets
-        uses: actions/download-artifact@master
-        with:
-          name: ctfp-reader-scala.pdf
-          path: ctfp-reader-scala.pdf
-      - name: Download build assets
-        uses: actions/download-artifact@master
-        with:
-          name: ctfp-print-scala.pdf
-          path: ctfp-print-scala.pdf
-      - name: Download build assets
-        uses: actions/download-artifact@master
-        with:
-          name: ctfp-reader-ocaml.pdf
-          path: ctfp-reader-ocaml.pdf
-      - name: Download build assets
-        uses: actions/download-artifact@master
-        with:
-          name: ctfp-print-ocaml.pdf
-          path: ctfp-print-ocaml.pdf
+          name: ${{ matrix.assets.source }}
+          path: ${{ matrix.assets.source }}
       - name: Upload release assets
         uses: actions/upload-release-asset@v1
         env:
