@@ -4,8 +4,25 @@ on:
   - push
 
 jobs:
+  dependencies:
+    name: Build dependencies
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set up Git repository
+        uses: actions/checkout@v1
+
+      - name: Create global variables
+        run: |
+          echo "::set-output name=version::$(git rev-parse --short HEAD)"
+
+      - name: Create necessary build file
+        run: |
+          echo -n -e "\\\newcommand{\OPTversion}{$(git rev-parse --short HEAD)}" > src/version.tex
+
   build:
     name: Build documents
+    needs: dependencies
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -18,11 +35,6 @@ jobs:
           - ctfp-reader-ocaml.tex
 
     steps:
-      - name: Create variables and necessary build files
-        run: |
-          echo "::set-env name=VERSION::$(git rev-parse --short HEAD)"
-          echo -n -e "\\\newcommand{\OPTversion}{$(git rev-parse --short HEAD)}" > src/version.tex
-
       - name: Build documents using LaTeX (default)
         uses: xu-cheng/latex-action@v2
         with:
@@ -31,35 +43,28 @@ jobs:
           root_file: ${{ matrix.sources }}
           latexmk_shell_escape: true
 
-
   release:
     name: "Create Github tag/pre-release"
     runs-on: ubuntu-latest
-    needs: build
-    # Map a step output to a job output
+    needs: dependencies,build
     outputs:
       upload_url: ${{ steps.create_release.upload_url }}
     steps:
-      - name: Create variables and necessary build files
-        run: |
-          echo "::set-env name=VERSION::$(git rev-parse --short HEAD)"
-          echo -n -e "\\\newcommand{\OPTversion}{$(git rev-parse --short HEAD)}" > src/version.tex
-
       - name: Create Github pre-release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ env.VERSION }}
-          release_name: Version ${{ env.VERSION }}
+          tag_name: ${{ needs.dependencies.outputs.version }}
+          release_name: Version ${{ needs.dependencies.outputs.version }}
           draft: false
           prerelease: true
 
   assets:
     name: Upload release asset (print)
     runs-on: ubuntu-latest
-    needs: release
+    needs: dependencies,release
     strategy:
       matrix:
         destination:
@@ -76,11 +81,6 @@ jobs:
           - source: src/ctfp-reader-ocaml.pdf
             destination: category-theory-for-programmers--reader--ocaml--
     steps:
-      - name: Create variables and necessary build files
-        run: |
-          echo "::set-env name=VERSION::$(git rev-parse --short HEAD)"
-          echo -n -e "\\\newcommand{\OPTversion}{$(git rev-parse --short HEAD)}" > src/version.tex
-
       - name: Upload release assets
         uses: actions/upload-release-asset@v1
         env:
@@ -88,5 +88,5 @@ jobs:
         with:
           upload_url: ${{ needs.release.outputs.upload_url }}
           asset_path: ${{ matrix.source }}
-          asset_name: ${{ matrix.destination }}${{ env.VERSION }}.pdf
+          asset_name: ${{ matrix.destination }}${{ needs.dependencies.outputs.version }}.pdf
           asset_content_type: application/pdf
