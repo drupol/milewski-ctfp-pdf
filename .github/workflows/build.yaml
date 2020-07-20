@@ -35,6 +35,9 @@ jobs:
           - ctfp-reader-ocaml.tex
 
     steps:
+      - name: Set up Git repository
+        uses: actions/checkout@v1
+
       - name: Build documents using LaTeX (default)
         run: |
           echo "Compiling ${{ matrix.sources }}..."
