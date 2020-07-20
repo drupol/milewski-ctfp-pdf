@@ -25,12 +25,18 @@ jobs:
     strategy:
       matrix:
         sources:
-          - ctfp-print.tex
-          - ctfp-reader.tex
-          - ctfp-print-scala.tex
-          - ctfp-reader-scala.tex
-          - ctfp-print-ocaml.tex
-          - ctfp-reader-ocaml.tex
+          - input: ctfp-print.tex
+            output: ctfp-print.pdf
+          - input: ctfp-reader.tex
+            output: ctfp-reader.pdf
+          - input: ctfp-print-scala.tex
+            output: ctfp-print-scala.pdf
+          - input: ctfp-reader-scala.tex
+            output: ctfp-reader-scala.pdf
+          - input: ctfp-reader-ocaml.tex
+            output: ctfp-reader-ocaml.pdf
+          - input: ctfp-print-ocaml.tex
+            output: ctfp-print-ocaml.pdf
 
     steps:
       - name: Set up Git repository
@@ -40,18 +46,18 @@ jobs:
         run: |
           echo -n -e "\\\newcommand{\OPTversion}{$(git rev-parse --short HEAD)}" > src/version.tex
 
-      - name: Build documents using LaTeX (${{ matrix.sources }})
+      - name: Build documents using LaTeX (${{ matrix.sources.input }})
         uses: xu-cheng/latex-action@v2
         with:
           working_directory: src
           latexmk_use_xelatex: true
-          root_file: ${{ matrix.sources }}
+          root_file: ${{ matrix.sources.input }}
           latexmk_shell_escape: true
-      - name: Upload build assets (${{ matrix.sources }})
+      - name: Upload build assets (${{ matrix.sources.output }})
         uses: actions/upload-artifact@master
         with:
-          name: ${{ matrix.sources }}
-          path: src/${{ matrix.sources }}
+          name: ${{ matrix.sources.output }}
+          path: src/${{ matrix.sources.output }}
 
   release:
     name: "Create Github tag/pre-release"
