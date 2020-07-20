@@ -104,8 +104,8 @@ jobs:
           name: ${{ matrix.assets.source }}
           path: ${{ matrix.assets.source }}
 
-      - name: tree
-        run: tree .
+      - name: ls -R
+        run: ls -R
 
       - name: Upload release assets
         uses: actions/upload-release-asset@v1
